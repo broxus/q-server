@@ -1493,30 +1493,48 @@ type Zerostate {
 	workchain_id: Int
 }
 
+"TIP-3 Token transaction"
 type TokenTransaction {
 	id: String
+	"Whether or not the transaction was aborted"
 	aborted: Boolean
+	"Human-readable amount in base units shifted by scale"
 	amount: String
+	"Amount in minimal units"
 	amount_bigint(format: BigIntFormat): String
+	"Token decimals"
 	amount_scale: Int
+	"A block mining time in UNIX format containing this token transaction"
 	block_time: Float
 	block_time_string: String
+	"Collection-unique field for pagination and sorting. This field is designed to retain logical order"
 	chain_order: String
+	"Transaction type: mint, burn, send or receive"
 	kind: String
+	"Logical time of the transaction (hex representation)"
 	lt(format: BigIntFormat): String
+	"Logical time of the transaction (decimal representation)"
 	lt_dec(format: BigIntFormat): String
 	message(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Message
+	"The hash of the message which initiated a token transaction"
 	message_hash: String
 	owner(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	"For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
 	owner_address(format: AddressFormat): String
+	"TIP-3 payload for token transfer callback"
 	payload: String
+	"TIP-3 TokenRoot address of the transaction's token"
 	root_address(format: AddressFormat): String
+	"Token symbol"
 	token: String
 	token_root(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	"Naming of the TIP standard: TIP-3, TIP-4, TIP-6, ..."
 	token_standard: String
 	token_wallet(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	"For send - address of sender-wallet, for receive - address of receiver-wallet"
 	token_wallet_address(format: AddressFormat): String
 	transaction(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Transaction
+	"The hash of the transaction which was created by a message from message_hash field"
 	transaction_hash: String
 }
 
@@ -3119,29 +3137,47 @@ input ZerostateFilter {
     OR: ZerostateFilter
 }
 
+"TIP-3 Token transaction"
 input TokenTransactionFilter {
 	id: StringFilter
+	"Whether or not the transaction was aborted"
 	aborted: BooleanFilter
+	"Human-readable amount in base units shifted by scale"
 	amount: StringFilter
+	"Amount in minimal units"
 	amount_bigint: StringFilter
+	"Token decimals"
 	amount_scale: IntFilter
+	"A block mining time in UNIX format containing this token transaction"
 	block_time: FloatFilter
+	"Collection-unique field for pagination and sorting. This field is designed to retain logical order"
 	chain_order: StringFilter
+	"Transaction type: mint, burn, send or receive"
 	kind: StringFilter
+	"Logical time of the transaction (hex representation)"
 	lt: StringFilter
+	"Logical time of the transaction (decimal representation)"
 	lt_dec: StringFilter
 	message: MessageFilter
+	"The hash of the message which initiated a token transaction"
 	message_hash: StringFilter
 	owner: AccountFilter
+	"For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
 	owner_address: StringFilter
+	"TIP-3 payload for token transfer callback"
 	payload: StringFilter
+	"TIP-3 TokenRoot address of the transaction's token"
 	root_address: StringFilter
+	"Token symbol"
 	token: StringFilter
 	token_root: AccountFilter
+	"Naming of the TIP standard: TIP-3, TIP-4, TIP-6, ..."
 	token_standard: StringFilter
 	token_wallet: AccountFilter
+	"For send - address of sender-wallet, for receive - address of receiver-wallet"
 	token_wallet_address: StringFilter
 	transaction: TransactionFilter
+	"The hash of the transaction which was created by a message from message_hash field"
 	transaction_hash: StringFilter
     OR: TokenTransactionFilter
 }

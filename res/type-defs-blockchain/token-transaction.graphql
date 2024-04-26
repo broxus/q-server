@@ -1,26 +1,44 @@
+"TIP-3 Token transaction"
 type BlockchainTokenTransaction implements Node {
     id: ID!
+    "Whether or not the transaction was aborted"
     aborted: Boolean
+    "Human-readable amount in base units shifted by scale"
     amount: String
+    "Amount in minimal units"
     amount_bigint(format: BigIntFormat): String
+    "Token decimals"
     amount_scale: Int
+    "A block mining time in UNIX format containing this token transaction"
     block_time: Float
     block_time_string: String
+    "Collection-unique field for pagination and sorting. This field is designed to retain logical order"
     chain_order: String
+    "Transaction type: mint, burn, send or receive"
     kind: String
+    "Logical time of the transaction (hex representation)"
     lt(format: BigIntFormat): String
+    "Logical time of the transaction (decimal representation)"
     lt_dec(format: BigIntFormat): String
-    message_hash: String
     message: BlockchainMessage
-    owner_address(format: AddressFormat): String
+    "The hash of the message which initiated a token transaction"
+    message_hash: String
     owner: BlockchainAccount
+    "For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
+    owner_address(format: AddressFormat): String
+    "TIP-3 payload for token transfer callback"
     payload: String
+    "TIP-3 TokenRoot address of the transaction's token"
     root_address(format: AddressFormat): String
+    "Token symbol"
     token: String
     token_root: BlockchainAccount
+    "Naming of the TIP standard: TIP-3, TIP-4, TIP-6, ..."
     token_standard: String
-    token_wallet_address(format: AddressFormat): String
     token_wallet: BlockchainAccount
-    transaction_hash: String
+    "For send - address of sender-wallet, for receive - address of receiver-wallet"
+    token_wallet_address(format: AddressFormat): String
     transaction: BlockchainTransaction
+    "The hash of the transaction which was created by a message from message_hash field"
+    transaction_hash: String
 }

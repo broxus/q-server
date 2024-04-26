@@ -1094,54 +1094,78 @@ export type BlockchainSignatures = {
     s?: Maybe<Scalars["String"]>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransaction = Node & {
     __typename?: "BlockchainTokenTransaction"
     id: Scalars["ID"]
+    /** Whether or not the transaction was aborted */
     aborted?: Maybe<Scalars["Boolean"]>
+    /** Human-readable amount in base units shifted by scale */
     amount?: Maybe<Scalars["String"]>
+    /** Amount in minimal units */
     amount_bigint?: Maybe<Scalars["String"]>
+    /** Token decimals */
     amount_scale?: Maybe<Scalars["Int"]>
+    /** A block mining time in UNIX format containing this token transaction */
     block_time?: Maybe<Scalars["Float"]>
     block_time_string?: Maybe<Scalars["String"]>
+    /** Collection-unique field for pagination and sorting. This field is designed to retain logical order */
     chain_order?: Maybe<Scalars["String"]>
+    /** Transaction type: mint, burn, send or receive */
     kind?: Maybe<Scalars["String"]>
+    /** Logical time of the transaction (hex representation) */
     lt?: Maybe<Scalars["String"]>
+    /** Logical time of the transaction (decimal representation) */
     lt_dec?: Maybe<Scalars["String"]>
-    message_hash?: Maybe<Scalars["String"]>
     message?: Maybe<BlockchainMessage>
-    owner_address?: Maybe<Scalars["String"]>
+    /** The hash of the message which initiated a token transaction */
+    message_hash?: Maybe<Scalars["String"]>
     owner?: Maybe<BlockchainAccount>
+    /** For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner */
+    owner_address?: Maybe<Scalars["String"]>
+    /** TIP-3 payload for token transfer callback */
     payload?: Maybe<Scalars["String"]>
+    /** TIP-3 TokenRoot address of the transaction's token */
     root_address?: Maybe<Scalars["String"]>
+    /** Token symbol */
     token?: Maybe<Scalars["String"]>
     token_root?: Maybe<BlockchainAccount>
+    /** Naming of the TIP standard: TIP-3, TIP-4, TIP-6, ... */
     token_standard?: Maybe<Scalars["String"]>
-    token_wallet_address?: Maybe<Scalars["String"]>
     token_wallet?: Maybe<BlockchainAccount>
-    transaction_hash?: Maybe<Scalars["String"]>
+    /** For send - address of sender-wallet, for receive - address of receiver-wallet */
+    token_wallet_address?: Maybe<Scalars["String"]>
     transaction?: Maybe<BlockchainTransaction>
+    /** The hash of the transaction which was created by a message from message_hash field */
+    transaction_hash?: Maybe<Scalars["String"]>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionAmount_BigintArgs = {
     format?: Maybe<BigIntFormat>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionLtArgs = {
     format?: Maybe<BigIntFormat>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionLt_DecArgs = {
     format?: Maybe<BigIntFormat>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionOwner_AddressArgs = {
     format?: Maybe<AddressFormat>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionRoot_AddressArgs = {
     format?: Maybe<AddressFormat>
 }
 
+/** TIP-3 Token transaction */
 export type BlockchainTokenTransactionToken_Wallet_AddressArgs = {
     format?: Maybe<AddressFormat>
 }
@@ -3609,13 +3633,18 @@ export type BlockchainTokenTransactionResolvers<
         ContextType,
         RequireFields<BlockchainTokenTransactionLt_DecArgs, never>
     >
+    message?: Resolver<
+        Maybe<ResolversTypes["BlockchainMessage"]>,
+        ParentType,
+        ContextType
+    >
     message_hash?: Resolver<
         Maybe<ResolversTypes["String"]>,
         ParentType,
         ContextType
     >
-    message?: Resolver<
-        Maybe<ResolversTypes["BlockchainMessage"]>,
+    owner?: Resolver<
+        Maybe<ResolversTypes["BlockchainAccount"]>,
         ParentType,
         ContextType
     >
@@ -3624,11 +3653,6 @@ export type BlockchainTokenTransactionResolvers<
         ParentType,
         ContextType,
         RequireFields<BlockchainTokenTransactionOwner_AddressArgs, never>
-    >
-    owner?: Resolver<
-        Maybe<ResolversTypes["BlockchainAccount"]>,
-        ParentType,
-        ContextType
     >
     payload?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
     root_address?: Resolver<
@@ -3648,24 +3672,24 @@ export type BlockchainTokenTransactionResolvers<
         ParentType,
         ContextType
     >
+    token_wallet?: Resolver<
+        Maybe<ResolversTypes["BlockchainAccount"]>,
+        ParentType,
+        ContextType
+    >
     token_wallet_address?: Resolver<
         Maybe<ResolversTypes["String"]>,
         ParentType,
         ContextType,
         RequireFields<BlockchainTokenTransactionToken_Wallet_AddressArgs, never>
     >
-    token_wallet?: Resolver<
-        Maybe<ResolversTypes["BlockchainAccount"]>,
+    transaction?: Resolver<
+        Maybe<ResolversTypes["BlockchainTransaction"]>,
         ParentType,
         ContextType
     >
     transaction_hash?: Resolver<
         Maybe<ResolversTypes["String"]>,
-        ParentType,
-        ContextType
-    >
-    transaction?: Resolver<
-        Maybe<ResolversTypes["BlockchainTransaction"]>,
         ParentType,
         ContextType
     >

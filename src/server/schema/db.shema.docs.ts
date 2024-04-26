@@ -603,4 +603,41 @@ Logical time is a component of the TON Blockchain that also plays an important r
         root_hash: "Zerostate root cell representation hash",
         file_hash: "Zerostate file hash",
     },
+
+    token_transaction: {
+        _doc: "TIP-3 Token transaction",
+        _: { collection: "tokens_transactions" },
+
+        amount_bigint: "Amount in minimal units",
+        amount_scale: "Token decimals",
+        amount: "Human-readable amount in base units shifted by scale",
+
+        kind: "Transaction type: mint, burn, send or receive",
+        aborted: "Whether or not the transaction was aborted",
+        lt: "Logical time of the transaction (hex representation)",
+        lt_dec: "Logical time of the transaction (decimal representation)",
+
+        owner_address:
+            "For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner",
+
+        token_wallet_address:
+            "For send - address of sender-wallet, for receive - address of receiver-wallet",
+
+        token: "Token symbol",
+        block_time:
+            "A block mining time in UNIX format containing this token transaction",
+
+        root_address: "TIP-3 TokenRoot address of the transaction's token",
+
+        message_hash:
+            "The hash of the message which initiated a token transaction",
+
+        payload: "TIP-3 payload for token transfer callback",
+        token_standard: "Naming of the TIP standard: TIP-3, TIP-4, TIP-6, ...",
+        chain_order:
+            "Collection-unique field for pagination and sorting. This field is designed to retain logical order",
+
+        transaction_hash:
+            "The hash of the transaction which was created by a message from message_hash field",
+    },
 }

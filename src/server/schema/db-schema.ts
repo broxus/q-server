@@ -379,37 +379,40 @@ const Transaction: TypeDef = {
 }
 
 const TokenTransaction: TypeDef = {
+    _doc: docs.token_transaction._doc,
     _: { collection: "tokens_transactions" },
 
-    amount_bigint: u128(),
-    amount_scale: u8(),
-    amount: string(),
+    amount_bigint: u128(docs.token_transaction.amount_bigint),
+    amount_scale: u8(docs.token_transaction.amount_scale),
+    amount: string(docs.token_transaction.amount),
 
-    kind: string(),
-    aborted: bool(),
-    lt: u64(),
-    lt_dec: u64(),
+    kind: string(docs.token_transaction.kind),
+    aborted: bool(docs.token_transaction.aborted),
+    lt: u64(docs.token_transaction.lt),
+    lt_dec: u64(docs.token_transaction.lt_dec),
 
-    owner_address: address(),
+    owner_address: address(docs.token_transaction.owner_address),
     owner: join({ Account }, "owner_address", "id"),
 
-    token_wallet_address: address(),
+    token_wallet_address: address(docs.token_transaction.token_wallet_address),
     token_wallet: join({ Account }, "token_wallet_address", "id"),
 
-    token: string(),
-    block_time: unixSeconds(),
+    token: string(docs.token_transaction.token),
+    block_time: unixSeconds(docs.token_transaction.block_time),
 
-    root_address: address(),
+    root_address: address(docs.token_transaction.root_address),
     token_root: join({ Account }, "root_address", "id"),
 
-    message_hash: stringWithLowerFilter(),
+    message_hash: stringWithLowerFilter(docs.token_transaction.message_hash),
     message: join({ Message }, "message_hash", "id"),
 
-    payload: string(),
-    token_standard: string(),
-    chain_order: stringWithLowerFilter(),
+    payload: string(docs.token_transaction.payload),
+    token_standard: string(docs.token_transaction.token_standard),
+    chain_order: stringWithLowerFilter(docs.token_transaction.chain_order),
 
-    transaction_hash: stringWithLowerFilter(),
+    transaction_hash: stringWithLowerFilter(
+        docs.token_transaction.transaction_hash,
+    ),
     transaction: join({ Transaction }, "transaction_hash", "id"),
 }
 
