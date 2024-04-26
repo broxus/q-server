@@ -908,6 +908,48 @@ const Zerostate = struct(
     true,
 )
 
+const TokenTransaction = struct(
+    {
+        id: stringLowerFilter,
+        aborted: scalar,
+        amount: scalar,
+        amount_bigint: bigUInt2,
+        amount_scale: scalar,
+        block_time: scalar,
+        block_time_string: stringCompanion("block_time"),
+        chain_order: stringLowerFilter,
+        kind: scalar,
+        lt: bigUInt1,
+        lt_dec: bigUInt1,
+        message: join("message_hash", "id", "messages", [], () => Message),
+        message_hash: stringLowerFilter,
+        owner: join("owner_address", "id", "accounts", [], () => Account),
+        owner_address: addressFilter,
+        payload: scalar,
+        root_address: addressFilter,
+        token: scalar,
+        token_root: join("root_address", "id", "accounts", [], () => Account),
+        token_standard: scalar,
+        token_wallet: join(
+            "token_wallet_address",
+            "id",
+            "accounts",
+            [],
+            () => Account,
+        ),
+        token_wallet_address: addressFilter,
+        transaction: join(
+            "transaction_hash",
+            "id",
+            "transactions",
+            [],
+            () => Transaction,
+        ),
+        transaction_hash: stringLowerFilter,
+    },
+    true,
+)
+
 function createResolvers(data: QBlockchainData) {
     return {
         OtherCurrency: {
@@ -1522,6 +1564,38 @@ function createResolvers(data: QBlockchainData) {
                 return resolveBigUInt(2, parent.total_balance, args)
             },
         },
+        TokenTransaction: {
+            id(parent: { _key: string }) {
+                return parent._key
+            },
+            amount_bigint(parent: { amount_bigint: string }, args: BigIntArgs) {
+                return resolveBigUInt(2, parent.amount_bigint, args)
+            },
+            lt(parent: { lt: string }, args: BigIntArgs) {
+                return resolveBigUInt(1, parent.lt, args)
+            },
+            lt_dec(parent: { lt_dec: string }, args: BigIntArgs) {
+                return resolveBigUInt(1, parent.lt_dec, args)
+            },
+            owner_address(
+                parent: { owner_address: string },
+                args: AddressArgs,
+            ) {
+                return resolveAddressField(parent.owner_address, args)
+            },
+            root_address(parent: { root_address: string }, args: AddressArgs) {
+                return resolveAddressField(parent.root_address, args)
+            },
+            token_wallet_address(
+                parent: { token_wallet_address: string },
+                args: AddressArgs,
+            ) {
+                return resolveAddressField(parent.token_wallet_address, args)
+            },
+            block_time_string(parent: { block_time: number }) {
+                return unixSecondsToString(parent.block_time)
+            },
+        },
         Query: {
             accounts: data.accounts.queryResolver(),
             transactions: data.transactions.queryResolver(),
@@ -1529,6 +1603,7 @@ function createResolvers(data: QBlockchainData) {
             blocks: data.blocks.queryResolver(),
             blocks_signatures: data.blocks_signatures.queryResolver(),
             zerostates: data.zerostates.queryResolver(),
+            tokens_transactions: data.tokens_transactions.queryResolver(),
         },
         Subscription: {
             accounts: data.accounts.subscriptionResolver(),
@@ -1537,6 +1612,8 @@ function createResolvers(data: QBlockchainData) {
             blocks: data.blocks.subscriptionResolver(),
             blocks_signatures: data.blocks_signatures.subscriptionResolver(),
             zerostates: data.zerostates.subscriptionResolver(),
+            tokens_transactions:
+                data.tokens_transactions.subscriptionResolver(),
         },
     }
 }
@@ -4567,6 +4644,72 @@ scalarFields.set("zerostates.workchain_id", {
     type: "number",
     path: "doc.workchain_id",
 })
+scalarFields.set("tokens_transactions.id", { type: "string", path: "doc._key" })
+scalarFields.set("tokens_transactions.aborted", {
+    type: "boolean",
+    path: "doc.aborted",
+})
+scalarFields.set("tokens_transactions.amount", {
+    type: "string",
+    path: "doc.amount",
+})
+scalarFields.set("tokens_transactions.amount_bigint", {
+    type: "uint1024",
+    path: "doc.amount_bigint",
+})
+scalarFields.set("tokens_transactions.amount_scale", {
+    type: "number",
+    path: "doc.amount_scale",
+})
+scalarFields.set("tokens_transactions.block_time", {
+    type: "number",
+    path: "doc.block_time",
+})
+scalarFields.set("tokens_transactions.chain_order", {
+    type: "string",
+    path: "doc.chain_order",
+})
+scalarFields.set("tokens_transactions.kind", {
+    type: "string",
+    path: "doc.kind",
+})
+scalarFields.set("tokens_transactions.lt", { type: "uint64", path: "doc.lt" })
+scalarFields.set("tokens_transactions.lt_dec", {
+    type: "uint64",
+    path: "doc.lt_dec",
+})
+scalarFields.set("tokens_transactions.message_hash", {
+    type: "string",
+    path: "doc.message_hash",
+})
+scalarFields.set("tokens_transactions.owner_address", {
+    type: "string",
+    path: "doc.owner_address",
+})
+scalarFields.set("tokens_transactions.payload", {
+    type: "string",
+    path: "doc.payload",
+})
+scalarFields.set("tokens_transactions.root_address", {
+    type: "string",
+    path: "doc.root_address",
+})
+scalarFields.set("tokens_transactions.token", {
+    type: "string",
+    path: "doc.token",
+})
+scalarFields.set("tokens_transactions.token_standard", {
+    type: "string",
+    path: "doc.token_standard",
+})
+scalarFields.set("tokens_transactions.token_wallet_address", {
+    type: "string",
+    path: "doc.token_wallet_address",
+})
+scalarFields.set("tokens_transactions.transaction_hash", {
+    type: "string",
+    path: "doc.transaction_hash",
+})
 const joinFields = new Map()
 joinFields.set("transactions.account", {
     on: "account_addr",
@@ -4682,6 +4825,61 @@ joinFields.set("blocks_signatures.block", {
         )
     },
 })
+joinFields.set("tokens_transactions.message", {
+    on: "message_hash",
+    collection: "messages",
+    refOn: "id",
+    canJoin(parent: { message_hash: string }, args: JoinArgs) {
+        return (
+            args.when === undefined ||
+            TokenTransaction.test(null, parent, args.when)
+        )
+    },
+})
+joinFields.set("tokens_transactions.owner", {
+    on: "owner_address",
+    collection: "accounts",
+    refOn: "id",
+    canJoin(parent: { owner_address: string }, args: JoinArgs) {
+        return (
+            args.when === undefined ||
+            TokenTransaction.test(null, parent, args.when)
+        )
+    },
+})
+joinFields.set("tokens_transactions.token_root", {
+    on: "root_address",
+    collection: "accounts",
+    refOn: "id",
+    canJoin(parent: { root_address: string }, args: JoinArgs) {
+        return (
+            args.when === undefined ||
+            TokenTransaction.test(null, parent, args.when)
+        )
+    },
+})
+joinFields.set("tokens_transactions.token_wallet", {
+    on: "token_wallet_address",
+    collection: "accounts",
+    refOn: "id",
+    canJoin(parent: { token_wallet_address: string }, args: JoinArgs) {
+        return (
+            args.when === undefined ||
+            TokenTransaction.test(null, parent, args.when)
+        )
+    },
+})
+joinFields.set("tokens_transactions.transaction", {
+    on: "transaction_hash",
+    collection: "transactions",
+    refOn: "id",
+    canJoin(parent: { transaction_hash: string }, args: JoinArgs) {
+        return (
+            args.when === undefined ||
+            TokenTransaction.test(null, parent, args.when)
+        )
+    },
+})
 export {
     scalarFields,
     joinFields,
@@ -4744,4 +4942,5 @@ export {
     Block,
     BlockSignatures,
     Zerostate,
+    TokenTransaction,
 }

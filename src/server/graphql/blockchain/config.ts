@@ -13,6 +13,7 @@ import {
     BlockchainBlock,
     BlockchainBlockSignatures,
     BlockchainMessage,
+    BlockchainTokenTransaction,
     BlockchainTransaction,
     Maybe,
 } from "./resolvers-types-generated"
@@ -23,6 +24,7 @@ export type Config = {
     blocks_signatures: CompiledCollectionConfig<BlockchainBlockSignatures>
     messages: CompiledCollectionConfig<BlockchainMessage>
     transactions: CompiledCollectionConfig<BlockchainTransaction>
+    tokens_transactions: CompiledCollectionConfig<BlockchainTokenTransaction>
 }
 
 export const config: Config = {
@@ -204,6 +206,118 @@ export const config: Config = {
                 refOnField: "_key",
                 queryBuilder: (path, onFieldParam, returnExpression) =>
                     `FOR ${path} in messages ` +
+                    `FILTER ${path}._key IN @${onFieldParam} ` +
+                    `RETURN ${returnExpression}`,
+            },
+        ],
+    }),
+    tokens_transactions: compileCollectionConfig({
+        alwaysFetchFields: ["chain_order"],
+        excludeFields: [],
+        qDataCollectionSelector: ctx => ctx.services.data.tokens_transactions,
+        joins: [
+            {
+                targetField: "transaction",
+                additionalFields: ["transaction_hash"],
+                pathForQuery: "tr",
+                joinedCollection: "transactions",
+                prefetchQueryBuilder: (
+                    parentPath,
+                    joinPath,
+                    returnExpression,
+                ) =>
+                    `(FOR ${joinPath} IN transactions ` +
+                    `FILTER ${joinPath}._key == ${parentPath}.transaction_hash ` +
+                    `RETURN ${returnExpression})[0]`,
+                needFetch: t => !!t.transaction,
+                onField: "transaction_hash",
+                refOnField: "_key",
+                queryBuilder: (path, onFieldParam, returnExpression) =>
+                    `FOR ${path} in transactions ` +
+                    `FILTER ${path}._key IN @${onFieldParam} ` +
+                    `RETURN ${returnExpression}`,
+            },
+            {
+                targetField: "message",
+                additionalFields: ["message_hash"],
+                pathForQuery: "msg",
+                joinedCollection: "messages",
+                prefetchQueryBuilder: (
+                    parentPath,
+                    joinPath,
+                    returnExpression,
+                ) =>
+                    `(FOR ${joinPath} IN messages ` +
+                    `FILTER ${joinPath}._key == ${parentPath}.message_hash ` +
+                    `RETURN ${returnExpression})[0]`,
+                needFetch: t => !!t.message,
+                onField: "message_hash",
+                refOnField: "_key",
+                queryBuilder: (path, onFieldParam, returnExpression) =>
+                    `FOR ${path} in messages ` +
+                    `FILTER ${path}._key IN @${onFieldParam} ` +
+                    `RETURN ${returnExpression}`,
+            },
+            {
+                targetField: "owner",
+                additionalFields: ["owner_address"],
+                pathForQuery: "acc",
+                joinedCollection: "accounts",
+                prefetchQueryBuilder: (
+                    parentPath,
+                    joinPath,
+                    returnExpression,
+                ) =>
+                    `(FOR ${joinPath} IN accounts ` +
+                    `FILTER ${joinPath}._key == ${parentPath}.owner_address ` +
+                    `RETURN ${returnExpression})[0]`,
+                needFetch: t => !!t.owner,
+                onField: "owner_address",
+                refOnField: "_key",
+                queryBuilder: (path, onFieldParam, returnExpression) =>
+                    `FOR ${path} in accounts ` +
+                    `FILTER ${path}._key IN @${onFieldParam} ` +
+                    `RETURN ${returnExpression}`,
+            },
+            {
+                targetField: "token_wallet",
+                additionalFields: ["token_wallet_address"],
+                pathForQuery: "acc",
+                joinedCollection: "accounts",
+                prefetchQueryBuilder: (
+                    parentPath,
+                    joinPath,
+                    returnExpression,
+                ) =>
+                    `(FOR ${joinPath} IN accounts ` +
+                    `FILTER ${joinPath}._key == ${parentPath}.token_wallet_address ` +
+                    `RETURN ${returnExpression})[0]`,
+                needFetch: t => !!t.token_wallet,
+                onField: "token_wallet_address",
+                refOnField: "_key",
+                queryBuilder: (path, onFieldParam, returnExpression) =>
+                    `FOR ${path} in accounts ` +
+                    `FILTER ${path}._key IN @${onFieldParam} ` +
+                    `RETURN ${returnExpression}`,
+            },
+            {
+                targetField: "token_root",
+                additionalFields: ["root_address"],
+                pathForQuery: "acc",
+                joinedCollection: "accounts",
+                prefetchQueryBuilder: (
+                    parentPath,
+                    joinPath,
+                    returnExpression,
+                ) =>
+                    `(FOR ${joinPath} IN accounts ` +
+                    `FILTER ${joinPath}._key == ${parentPath}.root_address ` +
+                    `RETURN ${returnExpression})[0]`,
+                needFetch: t => !!t.token_root,
+                onField: "root_address",
+                refOnField: "_key",
+                queryBuilder: (path, onFieldParam, returnExpression) =>
+                    `FOR ${path} in accounts ` +
                     `FILTER ${path}._key IN @${onFieldParam} ` +
                     `RETURN ${returnExpression}`,
             },

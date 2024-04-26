@@ -378,6 +378,41 @@ const Transaction: TypeDef = {
     }),
 }
 
+const TokenTransaction: TypeDef = {
+    _: { collection: "tokens_transactions" },
+
+    amount_bigint: u128(),
+    amount_scale: u8(),
+    amount: string(),
+
+    kind: string(),
+    aborted: bool(),
+    lt: u64(),
+    lt_dec: u64(),
+
+    owner_address: address(),
+    owner: join({ Account }, "owner_address", "id"),
+
+    token_wallet_address: address(),
+    token_wallet: join({ Account }, "token_wallet_address", "id"),
+
+    token: string(),
+    block_time: unixSeconds(),
+
+    root_address: address(),
+    token_root: join({ Account }, "root_address", "id"),
+
+    message_hash: stringWithLowerFilter(),
+    message: join({ Message }, "message_hash", "id"),
+
+    payload: string(),
+    token_standard: string(),
+    chain_order: stringWithLowerFilter(),
+
+    transaction_hash: stringWithLowerFilter(),
+    transaction: join({ Transaction }, "transaction_hash", "id"),
+}
+
 // BLOCK SIGNATURES
 
 const BlockSignatures = {
@@ -923,6 +958,7 @@ const schema: TypeDef = {
             Block,
             BlockSignatures,
             Zerostate,
+            TokenTransaction,
         },
     },
 }

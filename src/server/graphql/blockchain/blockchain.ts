@@ -21,6 +21,7 @@ import {
     resolve_account_transactions_by_lt,
     resolve_next_shard_blocks,
     resolve_prev_shard_blocks,
+    resolve_blockchain_tokens_transactions,
 } from "./fetchers"
 import { isDefined } from "./helpers"
 import { resolveAddress } from "../../address"
@@ -313,6 +314,19 @@ export const resolvers: Resolvers<QRequestContext> = {
                 "blockchain-workchain_transactions",
                 async traceSpan => {
                     return await resolve_blockchain_transactions(
+                        args,
+                        context,
+                        info,
+                        traceSpan,
+                    )
+                },
+            )
+        },
+        tokens_transactions: async (_parent, args, context, info) => {
+            return context.trace(
+                "blockchain-workchain_tokens_transactions",
+                async traceSpan => {
+                    return await resolve_blockchain_tokens_transactions(
                         args,
                         context,
                         info,

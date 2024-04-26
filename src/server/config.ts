@@ -133,6 +133,7 @@ export type QBlockchainDataConfig = {
     blocks: QDataProviderConfig
     transactions: QDataProviderConfig
     zerostate: string
+    tokens_transactions: QDataProviderConfig
 }
 
 export type QDataProviderConfig = {
@@ -582,6 +583,7 @@ export function resolveConfig(
     applyDatabaseDefaults(config.blockchain.accounts, config.hot)
     applyDataProviderDefaults(config.blockchain.blocks, config)
     applyDataProviderDefaults(config.blockchain.transactions, config)
+    applyDataProviderDefaults(config.blockchain.tokens_transactions, config)
     checkSubscriptionsConfig(config, specified)
     // Check all parameters that are enums
     checkEnum("subscriptions-mode", config.subscriptionsMode, SubscriptionsMode)
@@ -602,6 +604,8 @@ export function resolveConfig(
                 slow.blocks.cold,
                 slow.transactions.hot,
                 slow.transactions.cold,
+                slow.tokens_transactions.hot,
+                slow.tokens_transactions.cold,
             ],
             DEFAULT_SLOW_QUERIES_ARANGO_MAX_SOCKETS,
         )
@@ -622,7 +626,9 @@ export function resolveConfig(
 function checkConfig(config: QConfig) {
     const useArchive =
         config.blockchain.blocks.archive.length > 0 ||
-        config.blockchain.transactions.archive.length > 0
+        config.blockchain.transactions.archive.length > 0 ||
+        config.blockchain.tokens_transactions.archive.length > 0
+
     if (useArchive) {
         if (config.blockBocs.s3?.endpoint ?? "" === "") {
             throw QError.invalidConfig(

@@ -137,6 +137,10 @@ export class DataProviderFactory {
             config.transactions,
             `${logKey}_transactions`,
         )
+        const tokens_transactions = this.ensureDataProvider(
+            config.tokens_transactions,
+            `${logKey}_tokens_transactions`,
+        )
         return {
             accounts: this.ensureDatabases(
                 config.accounts,
@@ -150,6 +154,8 @@ export class DataProviderFactory {
                 config.zerostate,
                 `${logKey}_zerostate`,
             )?.provider,
+            tokens_transactions: tokens_transactions?.provider,
+            hot_tokens_transactions: tokens_transactions?.hot,
         }
     }
 
@@ -447,6 +453,7 @@ export default class TONQServer {
                 "type-defs-counterparties.graphql",
                 "type-defs-remp.graphql",
                 "type-defs-custom.graphql",
+                "type-defs-blockchain/token-transaction.graphql",
             ],
             supportSubscriptions: true,
         })

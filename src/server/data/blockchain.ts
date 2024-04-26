@@ -25,6 +25,7 @@ import {
     Message,
     Transaction,
     Zerostate,
+    TokenTransaction,
 } from "../graphql/resolvers-generated"
 import { QDataProvider, QIndexInfo, indexInfo } from "./data-provider"
 import { QType } from "../filter/filters"
@@ -149,6 +150,9 @@ export const INDEXES: { [name: string]: { indexes: QIndexInfo[] } } = {
     counterparties: {
         indexes: [],
     },
+    tokens_transactions: {
+        indexes: [],
+    },
 }
 
 Object.values(INDEXES).forEach((collection: { indexes: QIndexInfo[] }) => {
@@ -172,6 +176,7 @@ export default class QBlockchainData extends QData {
     messages: QDataCollection
     zerostates: QDataCollection
     counterparties: QDataCollection
+    tokens_transactions: QDataCollection
 
     latencyCache: LatencyCache
 
@@ -225,6 +230,12 @@ export default class QBlockchainData extends QData {
             "counterparties",
             Counterparty,
             options.providers.counterparties,
+        )
+        this.tokens_transactions = add(
+            "tokens_transactions",
+            TokenTransaction,
+            fast?.tokens_transactions,
+            slow?.tokens_transactions,
         )
 
         this.latencyCache = new LatencyCache({

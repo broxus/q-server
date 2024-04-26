@@ -987,6 +987,7 @@ export type BlockchainQuery = {
     blocks?: Maybe<BlockchainBlocksConnection>
     /** This node could be used for a cursor-based pagination of transactions. */
     transactions?: Maybe<BlockchainTransactionsConnection>
+    tokens_transactions?: Maybe<BlockchainTokensTransactionsConnection>
 }
 
 export type BlockchainQueryAccountArgs = {
@@ -1076,6 +1077,14 @@ export type BlockchainQueryTransactionsArgs = {
     archive?: Maybe<Scalars["Boolean"]>
 }
 
+export type BlockchainQueryTokens_TransactionsArgs = {
+    master_seq_no_range?: Maybe<BlockchainMasterSeqNoFilter>
+    workchain?: Maybe<Scalars["Int"]>
+    first?: Maybe<Scalars["Int"]>
+    after?: Maybe<Scalars["String"]>
+    archive?: Maybe<Scalars["Boolean"]>
+}
+
 export type BlockchainSignatures = {
     __typename?: "BlockchainSignatures"
     node_id?: Maybe<Scalars["String"]>
@@ -1083,6 +1092,70 @@ export type BlockchainSignatures = {
     r?: Maybe<Scalars["String"]>
     /** 's' part of signature */
     s?: Maybe<Scalars["String"]>
+}
+
+export type BlockchainTokenTransaction = Node & {
+    __typename?: "BlockchainTokenTransaction"
+    id: Scalars["ID"]
+    aborted?: Maybe<Scalars["Boolean"]>
+    amount?: Maybe<Scalars["String"]>
+    amount_bigint?: Maybe<Scalars["String"]>
+    amount_scale?: Maybe<Scalars["Int"]>
+    block_time?: Maybe<Scalars["Float"]>
+    block_time_string?: Maybe<Scalars["String"]>
+    chain_order?: Maybe<Scalars["String"]>
+    kind?: Maybe<Scalars["String"]>
+    lt?: Maybe<Scalars["String"]>
+    lt_dec?: Maybe<Scalars["String"]>
+    message_hash?: Maybe<Scalars["String"]>
+    message?: Maybe<BlockchainMessage>
+    owner_address?: Maybe<Scalars["String"]>
+    owner?: Maybe<BlockchainAccount>
+    payload?: Maybe<Scalars["String"]>
+    root_address?: Maybe<Scalars["String"]>
+    token?: Maybe<Scalars["String"]>
+    token_root?: Maybe<BlockchainAccount>
+    token_standard?: Maybe<Scalars["String"]>
+    token_wallet_address?: Maybe<Scalars["String"]>
+    token_wallet?: Maybe<BlockchainAccount>
+    transaction_hash?: Maybe<Scalars["String"]>
+    transaction?: Maybe<BlockchainTransaction>
+}
+
+export type BlockchainTokenTransactionAmount_BigintArgs = {
+    format?: Maybe<BigIntFormat>
+}
+
+export type BlockchainTokenTransactionLtArgs = {
+    format?: Maybe<BigIntFormat>
+}
+
+export type BlockchainTokenTransactionLt_DecArgs = {
+    format?: Maybe<BigIntFormat>
+}
+
+export type BlockchainTokenTransactionOwner_AddressArgs = {
+    format?: Maybe<AddressFormat>
+}
+
+export type BlockchainTokenTransactionRoot_AddressArgs = {
+    format?: Maybe<AddressFormat>
+}
+
+export type BlockchainTokenTransactionToken_Wallet_AddressArgs = {
+    format?: Maybe<AddressFormat>
+}
+
+export type BlockchainTokenTransactionEdge = {
+    __typename?: "BlockchainTokenTransactionEdge"
+    node: BlockchainTokenTransaction
+    cursor: Scalars["String"]
+}
+
+export type BlockchainTokensTransactionsConnection = {
+    __typename?: "BlockchainTokensTransactionsConnection"
+    edges: Array<BlockchainTokenTransactionEdge>
+    pageInfo: PageInfo
 }
 
 /** Transaction */
@@ -2121,6 +2194,9 @@ export type ResolversTypes = {
     BlockchainMessagesConnection: ResolverTypeWrapper<BlockchainMessagesConnection>
     BlockchainQuery: ResolverTypeWrapper<BlockchainQuery>
     BlockchainSignatures: ResolverTypeWrapper<BlockchainSignatures>
+    BlockchainTokenTransaction: ResolverTypeWrapper<BlockchainTokenTransaction>
+    BlockchainTokenTransactionEdge: ResolverTypeWrapper<BlockchainTokenTransactionEdge>
+    BlockchainTokensTransactionsConnection: ResolverTypeWrapper<BlockchainTokensTransactionsConnection>
     BlockchainTransaction: ResolverTypeWrapper<BlockchainTransaction>
     BlockchainTransactionEdge: ResolverTypeWrapper<BlockchainTransactionEdge>
     BlockchainTransactionsConnection: ResolverTypeWrapper<BlockchainTransactionsConnection>
@@ -2153,6 +2229,7 @@ export type ResolversTypes = {
         | ResolversTypes["BlockchainAccount"]
         | ResolversTypes["BlockchainBlock"]
         | ResolversTypes["BlockchainMessage"]
+        | ResolversTypes["BlockchainTokenTransaction"]
         | ResolversTypes["BlockchainTransaction"]
     OtherCurrency: ResolverTypeWrapper<OtherCurrency>
     OutMsg: ResolverTypeWrapper<OutMsg>
@@ -2207,6 +2284,9 @@ export type ResolversParentTypes = {
     BlockchainMessagesConnection: BlockchainMessagesConnection
     BlockchainQuery: BlockchainQuery
     BlockchainSignatures: BlockchainSignatures
+    BlockchainTokenTransaction: BlockchainTokenTransaction
+    BlockchainTokenTransactionEdge: BlockchainTokenTransactionEdge
+    BlockchainTokensTransactionsConnection: BlockchainTokensTransactionsConnection
     BlockchainTransaction: BlockchainTransaction
     BlockchainTransactionEdge: BlockchainTransactionEdge
     BlockchainTransactionsConnection: BlockchainTransactionsConnection
@@ -2234,6 +2314,7 @@ export type ResolversParentTypes = {
         | ResolversParentTypes["BlockchainAccount"]
         | ResolversParentTypes["BlockchainBlock"]
         | ResolversParentTypes["BlockchainMessage"]
+        | ResolversParentTypes["BlockchainTokenTransaction"]
         | ResolversParentTypes["BlockchainTransaction"]
     OtherCurrency: OtherCurrency
     OutMsg: OutMsg
@@ -3459,6 +3540,12 @@ export type BlockchainQueryResolvers<
         ContextType,
         RequireFields<BlockchainQueryTransactionsArgs, never>
     >
+    tokens_transactions?: Resolver<
+        Maybe<ResolversTypes["BlockchainTokensTransactionsConnection"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainQueryTokens_TransactionsArgs, never>
+    >
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3469,6 +3556,145 @@ export type BlockchainSignaturesResolvers<
     node_id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
     r?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
     s?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type BlockchainTokenTransactionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["BlockchainTokenTransaction"] = ResolversParentTypes["BlockchainTokenTransaction"],
+> = {
+    id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+    aborted?: Resolver<
+        Maybe<ResolversTypes["Boolean"]>,
+        ParentType,
+        ContextType
+    >
+    amount?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    amount_bigint?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionAmount_BigintArgs, never>
+    >
+    amount_scale?: Resolver<
+        Maybe<ResolversTypes["Int"]>,
+        ParentType,
+        ContextType
+    >
+    block_time?: Resolver<
+        Maybe<ResolversTypes["Float"]>,
+        ParentType,
+        ContextType
+    >
+    block_time_string?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType
+    >
+    chain_order?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType
+    >
+    kind?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    lt?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionLtArgs, never>
+    >
+    lt_dec?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionLt_DecArgs, never>
+    >
+    message_hash?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType
+    >
+    message?: Resolver<
+        Maybe<ResolversTypes["BlockchainMessage"]>,
+        ParentType,
+        ContextType
+    >
+    owner_address?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionOwner_AddressArgs, never>
+    >
+    owner?: Resolver<
+        Maybe<ResolversTypes["BlockchainAccount"]>,
+        ParentType,
+        ContextType
+    >
+    payload?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    root_address?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionRoot_AddressArgs, never>
+    >
+    token?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    token_root?: Resolver<
+        Maybe<ResolversTypes["BlockchainAccount"]>,
+        ParentType,
+        ContextType
+    >
+    token_standard?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType
+    >
+    token_wallet_address?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<BlockchainTokenTransactionToken_Wallet_AddressArgs, never>
+    >
+    token_wallet?: Resolver<
+        Maybe<ResolversTypes["BlockchainAccount"]>,
+        ParentType,
+        ContextType
+    >
+    transaction_hash?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType
+    >
+    transaction?: Resolver<
+        Maybe<ResolversTypes["BlockchainTransaction"]>,
+        ParentType,
+        ContextType
+    >
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type BlockchainTokenTransactionEdgeResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["BlockchainTokenTransactionEdge"] = ResolversParentTypes["BlockchainTokenTransactionEdge"],
+> = {
+    node?: Resolver<
+        ResolversTypes["BlockchainTokenTransaction"],
+        ParentType,
+        ContextType
+    >
+    cursor?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type BlockchainTokensTransactionsConnectionResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["BlockchainTokensTransactionsConnection"] = ResolversParentTypes["BlockchainTokensTransactionsConnection"],
+> = {
+    edges?: Resolver<
+        Array<ResolversTypes["BlockchainTokenTransactionEdge"]>,
+        ParentType,
+        ContextType
+    >
+    pageInfo?: Resolver<ResolversTypes["PageInfo"], ParentType, ContextType>
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4457,6 +4683,7 @@ export type NodeResolvers<
         | "BlockchainAccount"
         | "BlockchainBlock"
         | "BlockchainMessage"
+        | "BlockchainTokenTransaction"
         | "BlockchainTransaction",
         ParentType,
         ContextType
@@ -4975,6 +5202,9 @@ export type Resolvers<ContextType = any> = {
     BlockchainMessagesConnection?: BlockchainMessagesConnectionResolvers<ContextType>
     BlockchainQuery?: BlockchainQueryResolvers<ContextType>
     BlockchainSignatures?: BlockchainSignaturesResolvers<ContextType>
+    BlockchainTokenTransaction?: BlockchainTokenTransactionResolvers<ContextType>
+    BlockchainTokenTransactionEdge?: BlockchainTokenTransactionEdgeResolvers<ContextType>
+    BlockchainTokensTransactionsConnection?: BlockchainTokensTransactionsConnectionResolvers<ContextType>
     BlockchainTransaction?: BlockchainTransactionResolvers<ContextType>
     BlockchainTransactionEdge?: BlockchainTransactionEdgeResolvers<ContextType>
     BlockchainTransactionsConnection?: BlockchainTransactionsConnectionResolvers<ContextType>

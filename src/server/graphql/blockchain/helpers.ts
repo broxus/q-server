@@ -243,7 +243,8 @@ export async function processPaginatedQueryResult<T>(
         if (a[cursorField] < b[cursorField]) {
             return -1
         }
-        throw QError.create(500, "two entities with the same sort field")
+
+        return 0
     })
 
     // limit result length
