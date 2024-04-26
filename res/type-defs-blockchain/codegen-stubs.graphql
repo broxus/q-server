@@ -169,6 +169,15 @@ enum TransactionProcessingStatusEnum {
     Refused
 }
 
+enum TokenTransactionKindEnum {
+    Mint
+    Burn
+    Send
+    Receive
+    SendCancellation
+    BurnCancellation
+}
+
 enum AccountStatusChangeEnum {
     Unchanged
     Frozen

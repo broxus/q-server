@@ -65,6 +65,7 @@ export const tokenTransactionArchiveFields = new Set([
     "amount",
 
     "kind",
+    "kind_name",
     "aborted",
     "lt",
     "lt_dec",

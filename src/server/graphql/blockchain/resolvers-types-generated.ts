@@ -1115,8 +1115,17 @@ export type BlockchainTokenTransaction = Node & {
     /** Collection-unique field for pagination and sorting. This field is designed to retain logical order */
     chain_order?: Maybe<Scalars["String"]>
     id: Scalars["ID"]
-    /** Transaction type: mint, burn, send or receive */
-    kind?: Maybe<Scalars["String"]>
+    /**
+     * Token transaction type
+     * - 0 – mint
+     * - 1 – burn
+     * - 2 – send
+     * - 3 – receive
+     * - 4 – sendCancellation
+     * - 5 - receiveCancellation
+     */
+    kind?: Maybe<Scalars["Int"]>
+    kind_name?: Maybe<TokenTransactionKindEnum>
     /** Logical time of the transaction (hex representation) */
     lt?: Maybe<Scalars["String"]>
     /** Logical time of the transaction (decimal representation) */
@@ -1854,6 +1863,15 @@ export enum SplitTypeEnum {
     Merge = "Merge",
 }
 
+export enum TokenTransactionKindEnum {
+    Mint = "Mint",
+    Burn = "Burn",
+    Send = "Send",
+    Receive = "Receive",
+    SendCancellation = "SendCancellation",
+    BurnCancellation = "BurnCancellation",
+}
+
 export type TransactionAction = {
     __typename?: "TransactionAction"
     action_list_hash?: Maybe<Scalars["String"]>
@@ -2266,6 +2284,7 @@ export type ResolversTypes = {
     Query: ResolverTypeWrapper<{}>
     SkipReasonEnum: SkipReasonEnum
     SplitTypeEnum: SplitTypeEnum
+    TokenTransactionKindEnum: TokenTransactionKindEnum
     TransactionAction: ResolverTypeWrapper<TransactionAction>
     TransactionBounce: ResolverTypeWrapper<TransactionBounce>
     TransactionCompute: ResolverTypeWrapper<TransactionCompute>
@@ -3625,7 +3644,12 @@ export type BlockchainTokenTransactionResolvers<
         ContextType
     >
     id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
-    kind?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+    kind?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>
+    kind_name?: Resolver<
+        Maybe<ResolversTypes["TokenTransactionKindEnum"]>,
+        ParentType,
+        ContextType
+    >
     lt?: Resolver<
         Maybe<ResolversTypes["String"]>,
         ParentType,

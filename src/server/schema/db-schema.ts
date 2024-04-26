@@ -378,6 +378,15 @@ const Transaction: TypeDef = {
     }),
 }
 
+const tokenTransactionKind = u8enum("TokenTransactionKind", {
+    mint: 0,
+    burn: 1,
+    send: 2,
+    receive: 3,
+    sendCancellation: 4,
+    burnCancellation: 5,
+})
+
 const TokenTransaction: TypeDef = {
     _doc: docs.token_transaction._doc,
     _: { collection: "tokens_transactions" },
@@ -386,7 +395,7 @@ const TokenTransaction: TypeDef = {
     amount_scale: u8(docs.token_transaction.amount_scale),
     amount: string(docs.token_transaction.amount),
 
-    kind: string(docs.token_transaction.kind),
+    kind: tokenTransactionKind(docs.token_transaction.kind),
     aborted: bool(docs.token_transaction.aborted),
     lt: u64(docs.token_transaction.lt),
     lt_dec: u64(docs.token_transaction.lt_dec),

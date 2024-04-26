@@ -9,6 +9,8 @@ export function aggregatesResolvers(data: QBlockchainData) {
             aggregateTransactions: data.transactions.aggregationResolver(),
             aggregateMessages: data.messages.aggregationResolver(),
             aggregateAccounts: data.accounts.aggregationResolver(),
+            aggregateTokensTransactions:
+                data.tokens_transactions.aggregationResolver(),
         },
     }
 }

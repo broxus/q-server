@@ -919,6 +919,14 @@ const TokenTransaction = struct(
         block_time_string: stringCompanion("block_time"),
         chain_order: stringLowerFilter,
         kind: scalar,
+        kind_name: enumName("kind", {
+            Mint: 0,
+            Burn: 1,
+            Send: 2,
+            Receive: 3,
+            SendCancellation: 4,
+            BurnCancellation: 5,
+        }),
         lt: bigUInt1,
         lt_dec: bigUInt1,
         message: join("message_hash", "id", "messages", [], () => Message),
@@ -1595,6 +1603,14 @@ function createResolvers(data: QBlockchainData) {
             block_time_string(parent: { block_time: number }) {
                 return unixSecondsToString(parent.block_time)
             },
+            kind_name: createEnumNameResolver("kind", {
+                Mint: 0,
+                Burn: 1,
+                Send: 2,
+                Receive: 3,
+                SendCancellation: 4,
+                BurnCancellation: 5,
+            }),
         },
         Query: {
             accounts: data.accounts.queryResolver(),
@@ -4668,10 +4684,6 @@ scalarFields.set("tokens_transactions.block_time", {
 scalarFields.set("tokens_transactions.chain_order", {
     type: "string",
     path: "doc.chain_order",
-})
-scalarFields.set("tokens_transactions.kind", {
-    type: "string",
-    path: "doc.kind",
 })
 scalarFields.set("tokens_transactions.lt", { type: "uint64", path: "doc.lt" })
 scalarFields.set("tokens_transactions.lt_dec", {

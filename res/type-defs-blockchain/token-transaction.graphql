@@ -14,8 +14,17 @@ type BlockchainTokenTransaction implements Node {
     block_time_string: String
     "Collection-unique field for pagination and sorting. This field is designed to retain logical order"
     chain_order: String
-    "Transaction type: mint, burn, send or receive"
-    kind: String
+    """
+    Token transaction type
+    - 0 – mint
+    - 1 – burn
+    - 2 – send
+    - 3 – receive
+    - 4 – sendCancellation
+    - 5 - receiveCancellation
+    """
+    kind: Int
+    kind_name: TokenTransactionKindEnum
     "Logical time of the transaction (hex representation)"
     lt(format: BigIntFormat): String
     "Logical time of the transaction (decimal representation)"

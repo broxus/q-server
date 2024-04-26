@@ -71,6 +71,14 @@ extend type Query {
         "Specify list of fields to collect aggregated values"
         fields: [FieldAggregation]
     ): [String]
+
+    "Compute aggregated values for specified fields"
+    aggregateTokensTransactions(
+        "Specify filter for records to aggregate"
+        filter: TokenTransactionFilter,
+        "Specify list of fields to collect aggregated values"
+        fields: [FieldAggregation]
+    ): [String]
 }
 
 type Mutation {

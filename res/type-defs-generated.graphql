@@ -153,6 +153,15 @@ enum SplitTypeEnum {
     Merge
 }
 
+enum TokenTransactionKindEnum {
+    Mint
+    Burn
+    Send
+    Receive
+    SendCancellation
+    BurnCancellation
+}
+
 enum CapabilitiesFlag {
     CapNone
     CapIhrEnabled
@@ -1509,8 +1518,17 @@ type TokenTransaction {
 	block_time_string: String
 	"Collection-unique field for pagination and sorting. This field is designed to retain logical order"
 	chain_order: String
-	"Transaction type: mint, burn, send or receive"
-	kind: String
+	"""
+	Transaction type: mint, burn, send or receive
+	- 0 – mint
+	- 1 – burn
+	- 2 – send
+	- 3 – receive
+	- 4 – sendCancellation
+	- 5 – burnCancellation
+	"""
+	kind: Int
+	kind_name: TokenTransactionKindEnum
 	"Logical time of the transaction (hex representation)"
 	lt(format: BigIntFormat): String
 	"Logical time of the transaction (decimal representation)"
@@ -3137,6 +3155,17 @@ input ZerostateFilter {
     OR: ZerostateFilter
 }
 
+input TokenTransactionKindEnumFilter {
+	eq: TokenTransactionKindEnum
+	ne: TokenTransactionKindEnum
+	gt: TokenTransactionKindEnum
+	lt: TokenTransactionKindEnum
+	ge: TokenTransactionKindEnum
+	le: TokenTransactionKindEnum
+	in: [TokenTransactionKindEnum]
+	notIn: [TokenTransactionKindEnum]
+}
+
 "TIP-3 Token transaction"
 input TokenTransactionFilter {
 	id: StringFilter
@@ -3152,8 +3181,17 @@ input TokenTransactionFilter {
 	block_time: FloatFilter
 	"Collection-unique field for pagination and sorting. This field is designed to retain logical order"
 	chain_order: StringFilter
-	"Transaction type: mint, burn, send or receive"
-	kind: StringFilter
+	"""
+	Transaction type: mint, burn, send or receive
+	- 0 – mint
+	- 1 – burn
+	- 2 – send
+	- 3 – receive
+	- 4 – sendCancellation
+	- 5 – burnCancellation
+	"""
+	kind: IntFilter
+	kind_name: TokenTransactionKindEnumFilter
 	"Logical time of the transaction (hex representation)"
 	lt: StringFilter
 	"Logical time of the transaction (decimal representation)"
