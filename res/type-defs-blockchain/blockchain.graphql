@@ -328,11 +328,33 @@ type BlockchainQuery {
         archive: Boolean
     ): BlockchainTransactionsConnection
 
+    """
+    This node could be used for a cursor-based pagination of tokens transactions.
+    """
     tokens_transactions(
+        """
+        The transactions could be filtered by seq_no of corresponding masterchain blocks.
+        See also: blockchain { master_seq_no_range }
+        """
         master_seq_no_range: BlockchainMasterSeqNoFilter
+
+        "Optional filter by workchain"
         workchain: Int
+
+        "This field is mutually exclusive with 'last'"
         first: Int
         after: String
+
+        "This field is mutually exclusive with 'first'"
+        last: Int
+        before: String
+
+        """
+        Defines query scope.
+        If `true` then query performed on a maximum time range supported by the cloud.
+        If `false` then query performed on a recent time range supported by the cloud.
+        You can find an actual information about time ranges on evercloud documentation.
+        """
         archive: Boolean
     ): BlockchainTokensTransactionsConnection
 

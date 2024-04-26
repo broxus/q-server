@@ -404,6 +404,8 @@ export const resolvers: Resolvers<QRequestContext> = {
                     return "BlockchainMessage"
                 case "transaction":
                     return "BlockchainTransaction"
+                case "token_transaction":
+                    return "BlockchainTokenTransaction"
                 default:
                     return null
             }

@@ -20,6 +20,10 @@ type BlockchainAccountQuery {
 	address: String!
 }
 
+type BlockchainTokenTransaction {
+    _key: String!
+}
+
 # -----------------------------------------------------------------------------------
 
 type TransactionStorage {

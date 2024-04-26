@@ -1,5 +1,6 @@
 import {
     BlockchainQueryTokens_TransactionsArgs,
+    BlockchainTokenTransaction,
     BlockchainTokensTransactionsConnection,
 } from "../resolvers-types-generated"
 import { QRequestContext } from "../../../request"
@@ -42,7 +43,7 @@ export async function resolve_blockchain_tokens_transactions(
     await prepareChainOrderFilter(args, params, filters, context, useArchive)
 
     if (isDefined(args.workchain)) {
-        filters.push(`doc.workchain_id == @${params.add(args.workchain)}`)
+        filters.push(`tr.workchain_id == @${params.add(args.workchain)}`)
     }
 
     const { direction, limit } = processPaginationArgs(args)
@@ -62,38 +63,40 @@ export async function resolve_blockchain_tokens_transactions(
     // query
     const query = `
         FOR doc IN tokens_transactions
+        LET tr = DOCUMENT(CONCAT("transactions/", doc.transaction_hash))
         FILTER ${filters.join(" AND ")}
         SORT doc.chain_order ${direction == Direction.Backward ? "DESC" : "ASC"}
         LIMIT ${limit}
         RETURN ${returnExpression}
     `
 
-    const queryResult = await context.services.data.query(
-        required(context.services.data.tokens_transactions.provider),
-        {
-            text: query,
-            vars: params.values,
-            orderBy: [
-                {
-                    path: "chain_order",
-                    direction: "ASC",
-                },
-            ],
-            request: context,
-            traceSpan,
-            archive: useArchive,
-        },
-    )
+    const queryResult: BlockchainTokenTransaction[] =
+        (await context.services.data.query(
+            required(context.services.data.tokens_transactions.provider),
+            {
+                text: query,
+                vars: params.values,
+                orderBy: [
+                    {
+                        path: "chain_order",
+                        direction: "ASC",
+                    },
+                ],
+                request: context,
+                traceSpan,
+                archive: useArchive,
+            },
+        )) as any
 
     return (await processPaginatedQueryResult(
         queryResult,
         limit,
         direction,
-        "chain_order" as never,
+        "chain_order",
         stringCursor,
         async r => {
             await config.tokens_transactions.fetchJoins(
-                r as any,
+                r,
                 selectionSet,
                 context,
                 traceSpan,

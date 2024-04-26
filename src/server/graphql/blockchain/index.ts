@@ -5,6 +5,7 @@ import { resolvers as blockResolvers } from "./types/block"
 import { resolvers as messageResolvers } from "./types/message"
 import { resolvers as transactionResolvers } from "./types/transaction"
 import { resolvers as blockchainResolvers } from "./blockchain"
+import { resolvers as tokenTransactionResolvers } from "./types/token-transaction"
 
 const resolvers = {} as IResolvers
 ;[
@@ -13,6 +14,7 @@ const resolvers = {} as IResolvers
     blockResolvers,
     messageResolvers,
     transactionResolvers,
+    tokenTransactionResolvers,
 ].forEach(x => assignDeep(resolvers, x))
 
 export { resolvers as blockchainResolvers }

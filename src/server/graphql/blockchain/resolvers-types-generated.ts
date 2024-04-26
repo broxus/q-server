@@ -987,6 +987,7 @@ export type BlockchainQuery = {
     blocks?: Maybe<BlockchainBlocksConnection>
     /** This node could be used for a cursor-based pagination of transactions. */
     transactions?: Maybe<BlockchainTransactionsConnection>
+    /** This node could be used for a cursor-based pagination of tokens transactions. */
     tokens_transactions?: Maybe<BlockchainTokensTransactionsConnection>
 }
 
@@ -1082,6 +1083,8 @@ export type BlockchainQueryTokens_TransactionsArgs = {
     workchain?: Maybe<Scalars["Int"]>
     first?: Maybe<Scalars["Int"]>
     after?: Maybe<Scalars["String"]>
+    last?: Maybe<Scalars["Int"]>
+    before?: Maybe<Scalars["String"]>
     archive?: Maybe<Scalars["Boolean"]>
 }
 
@@ -1097,7 +1100,7 @@ export type BlockchainSignatures = {
 /** TIP-3 Token transaction */
 export type BlockchainTokenTransaction = Node & {
     __typename?: "BlockchainTokenTransaction"
-    id: Scalars["ID"]
+    _key: Scalars["String"]
     /** Whether or not the transaction was aborted */
     aborted?: Maybe<Scalars["Boolean"]>
     /** Human-readable amount in base units shifted by scale */
@@ -1111,6 +1114,7 @@ export type BlockchainTokenTransaction = Node & {
     block_time_string?: Maybe<Scalars["String"]>
     /** Collection-unique field for pagination and sorting. This field is designed to retain logical order */
     chain_order?: Maybe<Scalars["String"]>
+    id: Scalars["ID"]
     /** Transaction type: mint, burn, send or receive */
     kind?: Maybe<Scalars["String"]>
     /** Logical time of the transaction (hex representation) */
@@ -3587,7 +3591,7 @@ export type BlockchainTokenTransactionResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes["BlockchainTokenTransaction"] = ResolversParentTypes["BlockchainTokenTransaction"],
 > = {
-    id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+    _key?: Resolver<ResolversTypes["String"], ParentType, ContextType>
     aborted?: Resolver<
         Maybe<ResolversTypes["Boolean"]>,
         ParentType,
@@ -3620,6 +3624,7 @@ export type BlockchainTokenTransactionResolvers<
         ParentType,
         ContextType
     >
+    id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
     kind?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
     lt?: Resolver<
         Maybe<ResolversTypes["String"]>,
