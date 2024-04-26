@@ -151,7 +151,13 @@ export const INDEXES: { [name: string]: { indexes: QIndexInfo[] } } = {
         indexes: [],
     },
     tokens_transactions: {
-        indexes: [],
+        indexes: [
+            indexInfo("lt"),
+            indexInfo("chain_order"),
+            indexInfo("owner_address, chain_order"),
+            indexInfo("root_address, chain_order"),
+            indexInfo("root_address, owner_address, chain_order"),
+        ],
     },
 }
 
