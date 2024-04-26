@@ -57,6 +57,40 @@ export const transactionArchiveFields = new Set([
     "tr_type_name",
     "workchain_id",
 ])
+export const tokenTransactionArchiveFields = new Set([
+    "id",
+
+    "amount_bigint",
+    "amount_scale",
+    "amount",
+
+    "kind",
+    "aborted",
+    "lt",
+    "lt_dec",
+
+    "owner_address",
+    "owner",
+
+    "token_wallet_address",
+    "token_wallet",
+
+    "token",
+    "block_time",
+
+    "root_address",
+    "token_root",
+
+    "message_hash",
+    "message",
+
+    "payload",
+    "token_standard",
+    "chain_order",
+
+    "transaction_hash",
+    "transaction",
+])
 export const messageArchiveFields = new Set([
     "id",
     "hash",

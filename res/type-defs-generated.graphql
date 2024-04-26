@@ -1493,6 +1493,33 @@ type Zerostate {
 	workchain_id: Int
 }
 
+type TokenTransaction {
+	id: String
+	aborted: Boolean
+	amount: String
+	amount_bigint(format: BigIntFormat): String
+	amount_scale: Int
+	block_time: Float
+	block_time_string: String
+	chain_order: String
+	kind: String
+	lt(format: BigIntFormat): String
+	lt_dec(format: BigIntFormat): String
+	message(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Message
+	message_hash: String
+	owner(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	owner_address(format: AddressFormat): String
+	payload: String
+	root_address(format: AddressFormat): String
+	token: String
+	token_root(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	token_standard: String
+	token_wallet(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
+	token_wallet_address(format: AddressFormat): String
+	transaction(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Transaction
+	transaction_hash: String
+}
+
 input OtherCurrencyFilter {
 	currency: FloatFilter
 	value: StringFilter
@@ -3092,6 +3119,33 @@ input ZerostateFilter {
     OR: ZerostateFilter
 }
 
+input TokenTransactionFilter {
+	id: StringFilter
+	aborted: BooleanFilter
+	amount: StringFilter
+	amount_bigint: StringFilter
+	amount_scale: IntFilter
+	block_time: FloatFilter
+	chain_order: StringFilter
+	kind: StringFilter
+	lt: StringFilter
+	lt_dec: StringFilter
+	message: MessageFilter
+	message_hash: StringFilter
+	owner: AccountFilter
+	owner_address: StringFilter
+	payload: StringFilter
+	root_address: StringFilter
+	token: StringFilter
+	token_root: AccountFilter
+	token_standard: StringFilter
+	token_wallet: AccountFilter
+	token_wallet_address: StringFilter
+	transaction: TransactionFilter
+	transaction_hash: StringFilter
+    OR: TokenTransactionFilter
+}
+
 "Specify sort order direction"
 enum QueryOrderByDirection {
     "Documents will be sorted in ascended order (e.g. from A to Z)"
@@ -3122,6 +3176,7 @@ extend type Query {
 	blocks(filter: BlockFilter, orderBy: [QueryOrderBy], limit: Int, timeout: Float): [Block]
 	blocks_signatures(filter: BlockSignaturesFilter, orderBy: [QueryOrderBy], limit: Int, timeout: Float): [BlockSignatures]
 	zerostates(filter: ZerostateFilter, orderBy: [QueryOrderBy], limit: Int, timeout: Float): [Zerostate]
+	tokens_transactions(filter: TokenTransactionFilter, orderBy: [QueryOrderBy], limit: Int, timeout: Float): [TokenTransaction]
 }
 
 type Subscription {
@@ -3131,4 +3186,5 @@ type Subscription {
 	blocks(filter: BlockFilter): Block
 	blocks_signatures(filter: BlockSignaturesFilter): BlockSignatures
 	zerostates(filter: ZerostateFilter): Zerostate
+	tokens_transactions(filter: TokenTransactionFilter): TokenTransaction
 }

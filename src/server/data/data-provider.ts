@@ -351,6 +351,17 @@ export function useTransactionsArchive(
     )
 }
 
+export function useTokensTransactionsArchive(
+    archive: boolean | undefined | null,
+    context: QRequestContext,
+): boolean {
+    return (
+        (archive ?? false) &&
+        context.services.config.blockchain.tokens_transactions.archive.length >
+            0
+    )
+}
+
 export function useMessagesArchive(
     archive: boolean | undefined | null,
     context: QRequestContext,

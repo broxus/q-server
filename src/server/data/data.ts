@@ -39,6 +39,8 @@ export type QBlockchainDataProvider = {
     hotTransactions?: QDatabaseProvider
     accounts?: QDataProvider
     zerostate?: QDataProvider
+    tokens_transactions?: QDataProvider
+    hot_tokens_transactions?: QDatabaseProvider
 }
 
 export type QDataProviders = {

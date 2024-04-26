@@ -1,0 +1,26 @@
+type BlockchainTokenTransaction implements Node {
+    id: ID!
+    aborted: Boolean
+    amount: String
+    amount_bigint(format: BigIntFormat): String
+    amount_scale: Int
+    block_time: Float
+    block_time_string: String
+    chain_order: String
+    kind: String
+    lt(format: BigIntFormat): String
+    lt_dec(format: BigIntFormat): String
+    message_hash: String
+    message: BlockchainMessage
+    owner_address(format: AddressFormat): String
+    owner: BlockchainAccount
+    payload: String
+    root_address(format: AddressFormat): String
+    token: String
+    token_root: BlockchainAccount
+    token_standard: String
+    token_wallet_address(format: AddressFormat): String
+    token_wallet: BlockchainAccount
+    transaction_hash: String
+    transaction: BlockchainTransaction
+}

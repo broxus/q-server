@@ -50,6 +50,16 @@ type BlockchainTransactionEdge {
     cursor: String!
 }
 
+type BlockchainTokensTransactionsConnection {
+    edges: [BlockchainTokenTransactionEdge!]!
+    pageInfo: PageInfo!
+}
+
+type BlockchainTokenTransactionEdge {
+    node: BlockchainTokenTransaction!
+    cursor: String!
+}
+
 enum BlockchainMessageTypeFilterEnum {
     "External inbound"
     ExtIn
@@ -317,6 +327,15 @@ type BlockchainQuery {
         """
         archive: Boolean
     ): BlockchainTransactionsConnection
+
+    tokens_transactions(
+        master_seq_no_range: BlockchainMasterSeqNoFilter
+        workchain: Int
+        first: Int
+        after: String
+        archive: Boolean
+    ): BlockchainTokensTransactionsConnection
+
 }
 
 type BlockchainAccountQuery {

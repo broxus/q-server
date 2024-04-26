@@ -80,6 +80,7 @@ type BlockchainParams = {
     accounts: ConfigParam<string[]>
     blocks: DataProviderParams
     transactions: DataProviderParams
+    tokens_transactions: DataProviderParams
     zerostate: ConfigParam<string>
 }
 
@@ -335,6 +336,10 @@ export class ConfigParam<T extends ConfigValue> {
             transactions: ConfigParam.dataProvider(
                 withPrefix(prefix, "transactions"),
                 withPrefix(prefix, "transactions and messages"),
+            ),
+            tokens_transactions: ConfigParam.dataProvider(
+                withPrefix(prefix, "tokens_transactions"),
+                withPrefix(prefix, "transactions and tokens"),
             ),
             zerostate: ConfigParam.string(
                 toOption(zerostatePrefix),
