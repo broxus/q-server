@@ -32,6 +32,7 @@ type BlockchainTokenTransaction implements Node {
     message: BlockchainMessage
     "The hash of the message which initiated a token transaction"
     message_hash: String
+    meta: TokenTransactionMeta
     owner: BlockchainAccount
     "For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
     owner_address(format: AddressFormat): String

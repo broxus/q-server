@@ -423,6 +423,11 @@ const TokenTransaction: TypeDef = {
         docs.token_transaction.transaction_hash,
     ),
     transaction: join({ Transaction }, "transaction_hash", "id"),
+
+    meta: {
+        Receiver: { receiver_address: address() },
+        Sender: { sender_address: address() },
+    },
 }
 
 // BLOCK SIGNATURES

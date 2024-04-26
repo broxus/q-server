@@ -1014,6 +1014,19 @@ type ZerostateLibraries {
 	publishers: [String]
 }
 
+type TokenTransactionMetaReceiver {
+	receiver_address(format: AddressFormat): String
+}
+
+type TokenTransactionMetaSender {
+	sender_address(format: AddressFormat): String
+}
+
+type TokenTransactionMeta {
+	Receiver: TokenTransactionMetaReceiver
+	Sender: TokenTransactionMetaSender
+}
+
 """
 
 # Account type
@@ -1536,6 +1549,7 @@ type TokenTransaction {
 	message(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Message
 	"The hash of the message which initiated a token transaction"
 	message_hash: String
+	meta: TokenTransactionMeta
 	owner(timeout: Int, "**DEPRECATED**" when: TokenTransactionFilter): Account
 	"For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
 	owner_address(format: AddressFormat): String
@@ -2570,6 +2584,22 @@ input ZerostateLibrariesFilter {
     OR: ZerostateLibrariesFilter
 }
 
+input TokenTransactionMetaReceiverFilter {
+	receiver_address: StringFilter
+    OR: TokenTransactionMetaReceiverFilter
+}
+
+input TokenTransactionMetaSenderFilter {
+	sender_address: StringFilter
+    OR: TokenTransactionMetaSenderFilter
+}
+
+input TokenTransactionMetaFilter {
+	Receiver: TokenTransactionMetaReceiverFilter
+	Sender: TokenTransactionMetaSenderFilter
+    OR: TokenTransactionMetaFilter
+}
+
 """
 
 # Account type
@@ -3199,6 +3229,7 @@ input TokenTransactionFilter {
 	message: MessageFilter
 	"The hash of the message which initiated a token transaction"
 	message_hash: StringFilter
+	meta: TokenTransactionMetaFilter
 	owner: AccountFilter
 	"For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner"
 	owner_address: StringFilter

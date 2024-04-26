@@ -91,6 +91,8 @@ export const tokenTransactionArchiveFields = new Set([
 
     "transaction_hash",
     "transaction",
+
+    "meta",
 ])
 export const messageArchiveFields = new Set([
     "id",

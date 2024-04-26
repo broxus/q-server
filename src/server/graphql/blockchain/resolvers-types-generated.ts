@@ -1133,6 +1133,7 @@ export type BlockchainTokenTransaction = Node & {
     message?: Maybe<BlockchainMessage>
     /** The hash of the message which initiated a token transaction */
     message_hash?: Maybe<Scalars["String"]>
+    meta?: Maybe<TokenTransactionMeta>
     owner?: Maybe<BlockchainAccount>
     /** For send - address of the sender wallet's owner, for receive - address of the receiver wallet's owner */
     owner_address?: Maybe<Scalars["String"]>
@@ -1872,6 +1873,30 @@ export enum TokenTransactionKindEnum {
     BurnCancellation = "BurnCancellation",
 }
 
+export type TokenTransactionMeta = {
+    __typename?: "TokenTransactionMeta"
+    Receiver?: Maybe<TokenTransactionMetaReceiver>
+    Sender?: Maybe<TokenTransactionMetaSender>
+}
+
+export type TokenTransactionMetaReceiver = {
+    __typename?: "TokenTransactionMetaReceiver"
+    receiver_address?: Maybe<Scalars["String"]>
+}
+
+export type TokenTransactionMetaReceiverReceiver_AddressArgs = {
+    format?: Maybe<AddressFormat>
+}
+
+export type TokenTransactionMetaSender = {
+    __typename?: "TokenTransactionMetaSender"
+    sender_address?: Maybe<Scalars["String"]>
+}
+
+export type TokenTransactionMetaSenderSender_AddressArgs = {
+    format?: Maybe<AddressFormat>
+}
+
 export type TransactionAction = {
     __typename?: "TransactionAction"
     action_list_hash?: Maybe<Scalars["String"]>
@@ -2285,6 +2310,9 @@ export type ResolversTypes = {
     SkipReasonEnum: SkipReasonEnum
     SplitTypeEnum: SplitTypeEnum
     TokenTransactionKindEnum: TokenTransactionKindEnum
+    TokenTransactionMeta: ResolverTypeWrapper<TokenTransactionMeta>
+    TokenTransactionMetaReceiver: ResolverTypeWrapper<TokenTransactionMetaReceiver>
+    TokenTransactionMetaSender: ResolverTypeWrapper<TokenTransactionMetaSender>
     TransactionAction: ResolverTypeWrapper<TransactionAction>
     TransactionBounce: ResolverTypeWrapper<TransactionBounce>
     TransactionCompute: ResolverTypeWrapper<TransactionCompute>
@@ -2367,6 +2395,9 @@ export type ResolversParentTypes = {
     OutMsg: OutMsg
     PageInfo: PageInfo
     Query: {}
+    TokenTransactionMeta: TokenTransactionMeta
+    TokenTransactionMetaReceiver: TokenTransactionMetaReceiver
+    TokenTransactionMetaSender: TokenTransactionMetaSender
     TransactionAction: TransactionAction
     TransactionBounce: TransactionBounce
     TransactionCompute: TransactionCompute
@@ -3672,6 +3703,11 @@ export type BlockchainTokenTransactionResolvers<
         ParentType,
         ContextType
     >
+    meta?: Resolver<
+        Maybe<ResolversTypes["TokenTransactionMeta"]>,
+        ParentType,
+        ContextType
+    >
     owner?: Resolver<
         Maybe<ResolversTypes["BlockchainAccount"]>,
         ParentType,
@@ -4840,6 +4876,49 @@ export type QueryResolvers<
     >
 }
 
+export type TokenTransactionMetaResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["TokenTransactionMeta"] = ResolversParentTypes["TokenTransactionMeta"],
+> = {
+    Receiver?: Resolver<
+        Maybe<ResolversTypes["TokenTransactionMetaReceiver"]>,
+        ParentType,
+        ContextType
+    >
+    Sender?: Resolver<
+        Maybe<ResolversTypes["TokenTransactionMetaSender"]>,
+        ParentType,
+        ContextType
+    >
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type TokenTransactionMetaReceiverResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["TokenTransactionMetaReceiver"] = ResolversParentTypes["TokenTransactionMetaReceiver"],
+> = {
+    receiver_address?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<TokenTransactionMetaReceiverReceiver_AddressArgs, never>
+    >
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type TokenTransactionMetaSenderResolvers<
+    ContextType = any,
+    ParentType extends ResolversParentTypes["TokenTransactionMetaSender"] = ResolversParentTypes["TokenTransactionMetaSender"],
+> = {
+    sender_address?: Resolver<
+        Maybe<ResolversTypes["String"]>,
+        ParentType,
+        ContextType,
+        RequireFields<TokenTransactionMetaSenderSender_AddressArgs, never>
+    >
+    __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type TransactionActionResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes["TransactionAction"] = ResolversParentTypes["TransactionAction"],
@@ -5286,6 +5365,9 @@ export type Resolvers<ContextType = any> = {
     OutMsg?: OutMsgResolvers<ContextType>
     PageInfo?: PageInfoResolvers<ContextType>
     Query?: QueryResolvers<ContextType>
+    TokenTransactionMeta?: TokenTransactionMetaResolvers<ContextType>
+    TokenTransactionMetaReceiver?: TokenTransactionMetaReceiverResolvers<ContextType>
+    TokenTransactionMetaSender?: TokenTransactionMetaSenderResolvers<ContextType>
     TransactionAction?: TransactionActionResolvers<ContextType>
     TransactionBounce?: TransactionBounceResolvers<ContextType>
     TransactionCompute?: TransactionComputeResolvers<ContextType>

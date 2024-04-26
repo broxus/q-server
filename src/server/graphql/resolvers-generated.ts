@@ -605,6 +605,19 @@ const ZerostateLibraries = struct({
     publishers: StringArray,
 })
 
+const TokenTransactionMetaReceiver = struct({
+    receiver_address: addressFilter,
+})
+
+const TokenTransactionMetaSender = struct({
+    sender_address: addressFilter,
+})
+
+const TokenTransactionMeta = struct({
+    Receiver: TokenTransactionMetaReceiver,
+    Sender: TokenTransactionMetaSender,
+})
+
 const Account = struct(
     {
         id: addressFilter,
@@ -931,6 +944,7 @@ const TokenTransaction = struct(
         lt_dec: bigUInt1,
         message: join("message_hash", "id", "messages", [], () => Message),
         message_hash: stringLowerFilter,
+        meta: TokenTransactionMeta,
         owner: join("owner_address", "id", "accounts", [], () => Account),
         owner_address: addressFilter,
         payload: scalar,
@@ -1395,6 +1409,22 @@ function createResolvers(data: QBlockchainData) {
                 Frozen: 2,
                 NonExist: 3,
             }),
+        },
+        TokenTransactionMetaReceiver: {
+            receiver_address(
+                parent: { receiver_address: string },
+                args: AddressArgs,
+            ) {
+                return resolveAddressField(parent.receiver_address, args)
+            },
+        },
+        TokenTransactionMetaSender: {
+            sender_address(
+                parent: { sender_address: string },
+                args: AddressArgs,
+            ) {
+                return resolveAddressField(parent.sender_address, args)
+            },
         },
         Account: {
             balance(parent: { balance: string }, args: BigIntArgs) {
@@ -4694,6 +4724,14 @@ scalarFields.set("tokens_transactions.message_hash", {
     type: "string",
     path: "doc.message_hash",
 })
+scalarFields.set("tokens_transactions.meta.Receiver.receiver_address", {
+    type: "string",
+    path: "doc.meta.Receiver.receiver_address",
+})
+scalarFields.set("tokens_transactions.meta.Sender.sender_address", {
+    type: "string",
+    path: "doc.meta.Sender.sender_address",
+})
 scalarFields.set("tokens_transactions.owner_address", {
     type: "string",
     path: "doc.owner_address",
@@ -4948,6 +4986,9 @@ export {
     ZerostateMaster,
     ZerostateAccounts,
     ZerostateLibraries,
+    TokenTransactionMetaReceiver,
+    TokenTransactionMetaSender,
+    TokenTransactionMeta,
     Account,
     Transaction,
     Message,

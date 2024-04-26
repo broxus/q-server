@@ -732,6 +732,19 @@ enum OutMsgTypeEnum {
     None
 }
 
+type TokenTransactionMetaReceiver {
+    receiver_address(format: AddressFormat): String
+}
+
+type TokenTransactionMetaSender {
+    sender_address(format: AddressFormat): String
+}
+
+type TokenTransactionMeta {
+    Receiver: TokenTransactionMetaReceiver
+    Sender: TokenTransactionMetaSender
+}
+
 # -----------------------------------------------------------------------------------
 
 enum MessageTypeEnum {
