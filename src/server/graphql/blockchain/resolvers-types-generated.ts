@@ -1122,7 +1122,7 @@ export type BlockchainTokenTransaction = Node & {
      * - 2 – send
      * - 3 – receive
      * - 4 – sendCancellation
-     * - 5 - receiveCancellation
+     * - 5 - burnCancellation
      */
     kind?: Maybe<Scalars["Int"]>
     kind_name?: Maybe<TokenTransactionKindEnum>

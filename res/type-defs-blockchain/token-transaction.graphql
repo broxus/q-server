@@ -21,7 +21,7 @@ type BlockchainTokenTransaction implements Node {
     - 2 – send
     - 3 – receive
     - 4 – sendCancellation
-    - 5 - receiveCancellation
+    - 5 - burnCancellation
     """
     kind: Int
     kind_name: TokenTransactionKindEnum
